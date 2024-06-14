@@ -6,14 +6,36 @@ public class MainMenu : MonoBehaviour
 {
     public Material trapMat;
     public Material goalMat;
+    public Material colorblindTrapMat;
+    public Material colorblindGoalMat;
     public Toggle colorblindMode;
+
+    private Material originalTrapMat;
+    private Material originalGoalMat;
+
+    void Start()
+    {
+        // Store original materials
+        originalTrapMat = new Material(trapMat);
+        originalGoalMat = new Material(goalMat);
+    }
 
     public void PlayMaze()
     {
-        if (colorblindMode != null && colorblindMode.isOn)
+        // Toggle colorblind mode based on checkbox state
+        bool colorblindActive = colorblindMode.isOn;
+
+        if (colorblindActive)
         {
-            trapMat.color = new Color32(255, 112, 0, 255); // Ensure the correct alpha value
-            goalMat.color = Color.blue;
+            // Apply colorblind mode materials
+            trapMat.CopyPropertiesFromMaterial(colorblindTrapMat);
+            goalMat.CopyPropertiesFromMaterial(colorblindGoalMat);
+        }
+        else
+        {
+            // Revert to original materials
+            trapMat.CopyPropertiesFromMaterial(originalTrapMat);
+            goalMat.CopyPropertiesFromMaterial(originalGoalMat);
         }
 
         SceneManager.LoadScene("maze"); // Ensure "maze" matches the exact name of your maze scene
