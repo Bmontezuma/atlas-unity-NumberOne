@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FloatingPlatform : MonoBehaviour
 {
-    public float amplitude = 0.5f;  // The height of the floating movement
-    public float speed = 1f;        // The speed of the floating movement
+    public float floatStrength = 0.5f; // Strength of the floating effect
+    public float floatSpeed = 1.0f;    // Speed of the floating effect
+    public float moveStrength = 0.2f;  // Strength of the left/right movement
+    public float moveSpeed = 0.5f;     // Speed of the left/right movement
 
     private Vector3 initialPosition;
 
@@ -16,11 +16,28 @@ public class FloatingPlatform : MonoBehaviour
 
     void Update()
     {
-        // Calculate new position
-        float newX = initialPosition.x + Mathf.Sin(Time.time * speed) * amplitude;
-        float newY = initialPosition.y + Mathf.Cos(Time.time * speed * 0.5f) * amplitude;
-        float newZ = initialPosition.z + Mathf.Sin(Time.time * speed * 0.75f) * amplitude;
+        // Floating up and down
+        float newY = initialPosition.y + Mathf.Sin(Time.time * floatSpeed) * floatStrength;
 
-        transform.position = new Vector3(newX, newY, newZ);
+        // Moving left and right
+        float newX = initialPosition.x + Mathf.Sin(Time.time * moveSpeed) * moveStrength;
+
+        transform.position = new Vector3(newX, newY, initialPosition.z);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.transform.parent = transform;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            other.transform.parent = null;
+        }
     }
 }
