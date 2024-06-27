@@ -1,4 +1,3 @@
-
 # ***Unity - Assets: Models, Textures***
 ![gif](https://s3.eu-west-3.amazonaws.com/hbtn.intranet.project.files/holbertonschool-cs-unity/435/0.gif)
 

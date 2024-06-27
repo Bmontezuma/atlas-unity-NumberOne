@@ -4,42 +4,28 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform player;  // Reference to the player's Transform component
-    public float cameraMoveSpeed = 5f;  // Speed of the camera movement
-    public float rotationSpeed = 3f;  // Speed of the camera rotation
+    public GameObject player; // Reference to the player object
+    public float turnSpeed = 5.0f; // Rotation speed for camera movement
 
-    private Vector3 offset;  // Offset distance between the camera and player
+    private Vector3 offset; // Offset between camera and player
 
     void Start()
     {
-        offset = transform.position - player.position;  // Calculate initial offset
+        // Calculate the initial offset between camera and player
+        offset = transform.position - player.transform.position;
     }
 
-    void Update()
+    void LateUpdate()
     {
-        // Follow the player smoothly
-        Vector3 targetPosition = player.position + offset;
-        transform.position = Vector3.Lerp(transform.position, targetPosition, cameraMoveSpeed * Time.deltaTime);
+        // Follow the player
+        transform.position = player.transform.position + offset;
 
         // Rotate the camera based on mouse input
-        RotateCamera();
-    }
+        float mouseX = Input.GetAxis("Mouse X") * turnSpeed;
+        Quaternion rotation = Quaternion.Euler(0, mouseX, 0);
+        offset = rotation * offset;
 
-    void RotateCamera()
-    {
-        // Rotate the camera using mouse input
-        if (Input.GetMouseButton(1))  // Right mouse button held down
-        {
-            float horizontalRotation = Input.GetAxis("Mouse X") * rotationSpeed;
-            float verticalRotation = Input.GetAxis("Mouse Y") * rotationSpeed;
-
-            transform.RotateAround(player.position, Vector3.up, horizontalRotation);
-            transform.RotateAround(player.position, transform.right, -verticalRotation);
-
-            // Ensure camera doesn't flip upside down
-            Vector3 currentRotation = transform.eulerAngles;
-            currentRotation.z = 0;
-            transform.eulerAngles = currentRotation;
-        }
+        // Make sure the camera always looks at the player
+        transform.LookAt(player.transform);
     }
 }
