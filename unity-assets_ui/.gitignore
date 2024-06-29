@@ -70,3 +70,8 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Custom assets to be ignored
+/[Aa]ssets/25\ Rpg\ Game\ Tracks/
+/[Aa]ssets/RainMaker/
+/[Aa]ssets/TeddySuitKid/
