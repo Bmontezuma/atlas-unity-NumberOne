@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour
 {
     public GameObject player; // Reference to the player object
     public float turnSpeed = 5.0f; // Rotation speed for camera movement
-    public bool isInverted = false; // Flag to invert Y axis movement
 
     private Vector3 offset; // Offset between camera and player
 
@@ -25,9 +24,12 @@ public class CameraController : MonoBehaviour
         float mouseX = Input.GetAxis("Mouse X") * turnSpeed;
         float mouseY = Input.GetAxis("Mouse Y") * turnSpeed;
 
+        // Check if Y-axis inversion is enabled
+        bool isInverted = PlayerPrefs.GetInt("InvertY", 0) == 1;
+
         if (isInverted)
         {
-            mouseY *= -1; // Invert Y axis movement
+            mouseY *= -1; // Invert Y-axis movement
         }
 
         Quaternion rotation = Quaternion.Euler(mouseY, mouseX, 0);
