@@ -3,9 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void PlayGame()
+    public void LevelSelect(int level)
     {
-        SceneManager.LoadScene("Level01");
+        string levelName = "Level" + level.ToString("D2");
+        SceneManager.LoadScene(levelName);
     }
 
     public void ExitGame()
@@ -16,7 +17,6 @@ public class MainMenu : MonoBehaviour
 
     public void OpenOptions()
     {
-        Debug.Log("Open Options");
-        // Implement your options menu logic here if needed
+        SceneManager.LoadScene("Options");
     }
 }
