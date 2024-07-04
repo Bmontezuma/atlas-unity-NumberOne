@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 
 public class Timer : MonoBehaviour
 {
-    public Text TimerText;
+    public TextMeshProUGUI TimerText;
     public float time = 0f;
     private bool timerRunning = false;
 
@@ -33,5 +33,11 @@ public class Timer : MonoBehaviour
     public void StopTimer()
     {
         timerRunning = false;
+    }
+
+    public void Win(TextMeshProUGUI finalTimeText)
+    {
+        StopTimer();
+        finalTimeText.text = TimerText.text;
     }
 }
