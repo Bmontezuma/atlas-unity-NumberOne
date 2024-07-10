@@ -11,6 +11,7 @@ public class PlayerStart : MonoBehaviour
         if (startPosition != null)
         {
             transform.position = startPosition.position;
+            Debug.Log("PlayerStart Start - startPosition: " + startPosition.position);
         }
     }
 }

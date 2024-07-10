@@ -10,6 +10,7 @@ public class PauseMenu : MonoBehaviour
     {
         // Ensure PauseCanvas starts inactive
         pauseCanvas.SetActive(false);
+        Debug.Log("PauseMenu Start - PauseCanvas set to inactive");
     }
 
     void Update()
@@ -33,6 +34,7 @@ public class PauseMenu : MonoBehaviour
         // Pause the game
         Time.timeScale = 0f;
         isPaused = true;
+        Debug.Log("Game paused");
 
         // Activate the PauseCanvas
         pauseCanvas.SetActive(true);
@@ -43,6 +45,7 @@ public class PauseMenu : MonoBehaviour
         // Unpause the game
         Time.timeScale = 1f;
         isPaused = false;
+        Debug.Log("Game resumed");
 
         // Deactivate the PauseCanvas
         pauseCanvas.SetActive(false);
@@ -53,6 +56,7 @@ public class PauseMenu : MonoBehaviour
         // Restart the current level
         Time.timeScale = 1f;  // Ensure time is running normally
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log("Restarting level: " + SceneManager.GetActiveScene().name);
     }
 
     public void MainMenu()
@@ -60,6 +64,7 @@ public class PauseMenu : MonoBehaviour
         // Load the MainMenu scene
         Time.timeScale = 1f;  // Ensure time is running normally
         SceneManager.LoadScene("MainMenu");
+        Debug.Log("Loading MainMenu");
     }
 
     public void Options()
@@ -67,5 +72,6 @@ public class PauseMenu : MonoBehaviour
         // Load the Options scene
         Time.timeScale = 1f;  // Ensure time is running normally
         SceneManager.LoadScene("Options");
+        Debug.Log("Loading Options menu");
     }
 }

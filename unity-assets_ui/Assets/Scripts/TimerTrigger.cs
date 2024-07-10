@@ -8,6 +8,7 @@ public class TimerTrigger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("TimerTrigger Start");
     }
 
     // Update is called once per frame
@@ -19,6 +20,7 @@ public class TimerTrigger : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         if (other.name == "Player")
-            Player.GetComponent<Timer>().enabled = true;
+        Debug.Log("Player exited trigger");
+        Player.GetComponent<Timer>().enabled = true;
     }
 }

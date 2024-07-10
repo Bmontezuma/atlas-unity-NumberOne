@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();  // Get the Rigidbody component on the Player GameObject
         lastStablePosition = transform.position;  // Initialize last stable position to the starting position
+        Debug.Log("PlayerController Start - lastStablePosition: " + lastStablePosition);
     }
 
     void Update()
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
         // Handle player movement
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
+        Debug.Log("PlayerController Update - horizontal: " + horizontal + ", vertical: " + vertical);
 
         Vector3 moveDirection = new Vector3(horizontal, 0f, vertical) * moveSpeed * Time.deltaTime;
         transform.Translate(moveDirection, Space.World);
@@ -45,6 +47,7 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(rb.velocity.y) < 0.001f)  // Check if the player is grounded (vertically stationary)
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);  // Apply jump force
+            Debug.Log("PlayerController Jump - jumpForce: " + jumpForce);
         }
     }
 
@@ -53,6 +56,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))  // Adjust the tag as per your platform GameObjects
         {
             lastStablePosition = transform.position;  // Update last stable position when colliding with a platform
+            Debug.Log("PlayerController OnCollisionEnter - lastStablePosition: " + lastStablePosition);
         }
     }
 
@@ -70,6 +74,7 @@ public class PlayerController : MonoBehaviour
         transform.position = topPosition;  // Teleport player to the top position
         rb.velocity = Vector3.zero;  // Reset player's velocity
         rb.angularVelocity = Vector3.zero;  // Reset player's angular velocity
+        Debug.Log("PlayerController FallFromTop - topPosition: " + topPosition);
     }
 
     void Respawn()
@@ -77,5 +82,6 @@ public class PlayerController : MonoBehaviour
         transform.position = lastStablePosition;  // Teleport player to last stable position
         rb.velocity = Vector3.zero;  // Reset player's velocity
         rb.angularVelocity = Vector3.zero;  // Reset player's angular velocity
+        Debug.Log("PlayerController Respawn - lastStablePosition: " + lastStablePosition);
     }
 }

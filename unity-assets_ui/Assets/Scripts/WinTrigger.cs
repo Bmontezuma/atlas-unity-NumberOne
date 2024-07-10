@@ -25,6 +25,7 @@ public class WinTrigger : MonoBehaviour
 
                 // Call the Win method on the Timer script to handle win logic
                 playerTimer.Win(finalTimeText);
+                Debug.Log("Player won - final time: " + finalTimeText.text);
 
                 // Activate the WinCanvas
                 winCanvas.SetActive(true);

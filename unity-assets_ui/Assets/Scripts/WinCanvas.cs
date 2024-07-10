@@ -9,6 +9,7 @@ public class WinCanvas : MonoBehaviour
     {
         // Load the MainMenu scene
         SceneManager.LoadScene("MainMenu");
+        Debug.Log("Loading MainMenu");
     }
 
     public void NextLevel()
@@ -16,5 +17,6 @@ public class WinCanvas : MonoBehaviour
         // Load the next level, assuming levels are named sequentially
         int nextLevelIndex = SceneManager.GetActiveScene().buildIndex + 1;
         SceneManager.LoadScene(nextLevelIndex);
+        Debug.Log("Loading next level: " + nextLevelIndex);
     }
 }

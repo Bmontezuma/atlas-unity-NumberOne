@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
     {
         string levelName = "Level" + level.ToString("D2");
         SceneManager.LoadScene(levelName);
+        Debug.Log("Loading level: " + levelName);
     }
 
     public void ExitGame()
@@ -18,5 +19,6 @@ public class MainMenu : MonoBehaviour
     public void OpenOptions()
     {
         SceneManager.LoadScene("Options");
+        Debug.Log("Opening Options menu");
     }
 }
