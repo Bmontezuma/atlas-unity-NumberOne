@@ -9,6 +9,9 @@ public class WinTrigger : MonoBehaviour
     public int increasedFontSize = 60;
     public Color winColor = Color.green;
 
+    public GameObject winCanvas;
+    public TextMeshProUGUI finalTimeText;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -19,6 +22,13 @@ public class WinTrigger : MonoBehaviour
                 playerTimer.StopTimer();
                 timerText.fontSize = increasedFontSize;
                 timerText.color = winColor;
+
+                // Call the Win method on the Timer script to handle win logic
+                playerTimer.Win(finalTimeText);
+                Debug.Log("Player won - final time: " + finalTimeText.text);
+
+                // Activate the WinCanvas
+                winCanvas.SetActive(true);
             }
         }
     }

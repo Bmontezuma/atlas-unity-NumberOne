@@ -22,7 +22,17 @@ public class CameraController : MonoBehaviour
 
         // Rotate the camera based on mouse input
         float mouseX = Input.GetAxis("Mouse X") * turnSpeed;
-        Quaternion rotation = Quaternion.Euler(0, mouseX, 0);
+        float mouseY = Input.GetAxis("Mouse Y") * turnSpeed;
+
+        // Check if Y-axis inversion is enabled
+        bool isInverted = PlayerPrefs.GetInt("InvertY", 0) == 1;
+
+        if (isInverted)
+        {
+            mouseY *= -1; // Invert Y-axis movement
+        }
+
+        Quaternion rotation = Quaternion.Euler(mouseY, mouseX, 0);
         offset = rotation * offset;
 
         // Make sure the camera always looks at the player

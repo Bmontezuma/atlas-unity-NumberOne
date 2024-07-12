@@ -5,30 +5,43 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
-    public TextMeshProUGUI timerText;
-    private float elapsedTime;
-    private bool isRunning;
+    public TextMeshProUGUI TimerText;
+    public float time = 0f;
+    private bool timerRunning = false;
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        Debug.Log("Timer Start");
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        if (isRunning)
+        if (timerRunning)
         {
-            elapsedTime += Time.deltaTime;
-            int minutes = Mathf.FloorToInt(elapsedTime / 60F);
-            int seconds = Mathf.FloorToInt(elapsedTime % 60F);
-            float fraction = (elapsedTime * 100) % 100;
-            timerText.text = string.Format("{0:0}:{1:00}.{2:00}", minutes, seconds, fraction);
+            time += Time.deltaTime;
+            TimerText.text = time.ToString("0:00.00");
+            Debug.Log("Timer Update - time: " + time);
         }
     }
 
     public void StartTimer()
     {
-        isRunning = true;
+        timerRunning = true;
+        Debug.Log("Timer started");
     }
 
     public void StopTimer()
     {
-        isRunning = false;
+        timerRunning = false;
+        Debug.Log("Timer stopped");
+    }
+
+    public void Win(TextMeshProUGUI finalTimeText)
+    {
+        StopTimer();
+        finalTimeText.text = TimerText.text;
+        Debug.Log("Timer win - final time: " + TimerText.text);
     }
 }
-
