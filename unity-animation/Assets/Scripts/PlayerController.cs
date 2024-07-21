@@ -9,79 +9,100 @@ public class PlayerController : MonoBehaviour
     public float fallThreshold = -10f; // Threshold for falling off the platforms
     public Transform startPosition; // Reference to the start position
 
-    Rigidbody rb;  // Reference to the Rigidbody component
-    Vector3 lastStablePosition;  // To store the last stable position
+    private Rigidbody rb;  // Reference to the Rigidbody component
+    private Vector3 lastStablePosition;  // To store the last stable position
+    private Animator animator;  // Reference to the Animator component
+    private bool isGrounded;  // Track if the player is grounded
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();  // Get the Rigidbody component on the Player GameObject
+        animator = GetComponent<Animator>();  // Get the Animator component on the Player GameObject
         lastStablePosition = transform.position;  // Initialize last stable position to the starting position
-        Debug.Log("PlayerController Start - lastStablePosition: " + lastStablePosition);
+        isGrounded = true; // Initialize grounded state
     }
 
     void Update()
     {
-        // Handle player movement
+        HandleMovement();
+        HandleJump();
+        CheckFall();
+    }
+
+    private void HandleMovement()
+    {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        Debug.Log("PlayerController Update - horizontal: " + horizontal + ", vertical: " + vertical);
 
-        Vector3 moveDirection = new Vector3(horizontal, 0f, vertical) * moveSpeed * Time.deltaTime;
-        transform.Translate(moveDirection, Space.World);
+        bool isRunning = horizontal != 0f || vertical != 0f;
+        animator.SetBool("isRunning", isRunning);
 
-        // Handle player jump
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isRunning)
         {
-            Jump();
+            Vector3 moveDirection = new Vector3(horizontal, 0f, vertical) * moveSpeed * Time.deltaTime;
+            rb.MovePosition(transform.position + moveDirection);
         }
+    }
 
-        // Check if the player has fallen below the threshold
+    private void HandleJump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+            animator.SetBool("isJumping", true);
+            isGrounded = false;
+        }
+    }
+
+    private void CheckFall()
+    {
         if (transform.position.y < fallThreshold)
         {
             FallFromTop();
         }
     }
 
-    void Jump()
+    private void OnCollisionEnter(Collision collision)
     {
-        if (Mathf.Abs(rb.velocity.y) < 0.001f)  // Check if the player is grounded (vertically stationary)
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);  // Apply jump force
-            Debug.Log("PlayerController Jump - jumpForce: " + jumpForce);
+            lastStablePosition = transform.position;
+            animator.SetBool("isJumping", false);
+            animator.SetBool("isFalling", false);
+            isGrounded = true;
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Ground"))  // Adjust the tag as per your platform GameObjects
-        {
-            lastStablePosition = transform.position;  // Update last stable position when colliding with a platform
-            Debug.Log("PlayerController OnCollisionEnter - lastStablePosition: " + lastStablePosition);
-        }
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("DeathZone"))  // Adjust the tag for your death zone
+        if (other.gameObject.CompareTag("DeathZone"))
         {
             Respawn();
         }
     }
 
-    void FallFromTop()
+    private void FallFromTop()
     {
-        Vector3 topPosition = new Vector3(startPosition.position.x, 20f, startPosition.position.z);  // Set the top position
-        transform.position = topPosition;  // Teleport player to the top position
-        rb.velocity = Vector3.zero;  // Reset player's velocity
-        rb.angularVelocity = Vector3.zero;  // Reset player's angular velocity
-        Debug.Log("PlayerController FallFromTop - topPosition: " + topPosition);
+        Vector3 topPosition = new Vector3(startPosition.position.x, 20f, startPosition.position.z);
+        transform.position = topPosition;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        animator.SetBool("isFalling", true);
     }
 
-    void Respawn()
+    private void Respawn()
     {
-        transform.position = lastStablePosition;  // Teleport player to last stable position
-        rb.velocity = Vector3.zero;  // Reset player's velocity
-        rb.angularVelocity = Vector3.zero;  // Reset player's angular velocity
-        Debug.Log("PlayerController Respawn - lastStablePosition: " + lastStablePosition);
+        transform.position = lastStablePosition;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        animator.SetBool("isFalling", false);
+        animator.SetBool("isGettingUp", true);
+        StartCoroutine(ResetGettingUp());
+    }
+
+    private IEnumerator ResetGettingUp()
+    {
+        yield return new WaitForSeconds(1f); // Adjust the wait time to match your getting up animation duration
+        animator.SetBool("isGettingUp", false);
     }
 }
