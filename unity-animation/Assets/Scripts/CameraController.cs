@@ -1,52 +1,61 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour
 {
-    public GameObject player; // Reference to the player object
-    public float turnSpeed = 5.0f; // Rotation speed for camera movement
-    public float smoothSpeed = 0.125f; // Smooth transition speed
-    public Vector2 verticalRotationLimits = new Vector2(-60f, 60f); // Limits for vertical rotation
+    public Transform player; // The target the camera should follow
+    public float turnSpeed = 4.0f; // The speed at which the camera should follow the target
+    public Vector3 offset; // The offset of the camera from the target
+    public bool isInverted = false;
+    public int Inverted = -1;
+    private bool mouseDown = false;
 
-    private Vector3 offset; // Offset between camera and player
-    private float currentX = 0f; // Current X rotation
-    private float currentY = 0f; // Current Y rotation
+    private Scene OptionsScene;
 
+    // Start is called before the first frame update
     void Start()
     {
-        // Calculate the initial offset between camera and player
-        offset = transform.position - player.transform.position;
+        if (PlayerPrefs.HasKey("InvertYToggle"))
+            isInverted = PlayerPrefs.GetInt("InvertYToggle") == 0 ? false : true;
+        else
+            isInverted = false;
+
+        offset = new Vector3(0.0f, 2.5f, -6.25f);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
     }
 
     void LateUpdate()
     {
-        // Follow the player with smooth transition
-        Vector3 desiredPosition = player.transform.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = smoothedPosition;
-
-        // Rotate the camera based on mouse input
-        float mouseX = Input.GetAxis("Mouse X") * turnSpeed;
-        float mouseY = Input.GetAxis("Mouse Y") * turnSpeed;
-
-        // Check if Y-axis inversion is enabled
-        bool isInverted = PlayerPrefs.GetInt("InvertY", 0) == 1;
         if (isInverted)
+            Inverted = 1;
+        if (!isInverted)
+            Inverted = -1;
+
+        if (Input.GetMouseButtonDown(1))
+            mouseDown = true;
+        if (Input.GetMouseButtonUp(1))
+            mouseDown = false;
+
+        if (mouseDown)
         {
-            mouseY *= -1; // Invert Y-axis movement
+            offset = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * turnSpeed, Vector3.up) * offset;
+            offset = Quaternion.AngleAxis(Input.GetAxis("Mouse Y") * Inverted * turnSpeed, Vector3.right) * offset;
+
+            Quaternion targetrotation = transform.rotation;
+            targetrotation.x = 0;
+            targetrotation.z = 0;
+            player.rotation = targetrotation;
         }
-
-        // Update rotation values
-        currentX += mouseX;
-        currentY -= mouseY;
-        currentY = Mathf.Clamp(currentY, verticalRotationLimits.x, verticalRotationLimits.y);
-
-        // Apply rotation
-        Quaternion rotation = Quaternion.Euler(currentY, currentX, 0);
-        offset = rotation * offset;
-
-        // Make sure the camera always looks at the player
-        transform.LookAt(player.transform);
+        transform.position = player.transform.position + offset;
+        transform.LookAt(player.transform.position);
     }
 }
