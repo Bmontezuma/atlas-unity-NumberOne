@@ -90,7 +90,6 @@ crashlytics-build.properties
 /[Aa]ssets/**/*.aiff
 /[Aa]ssets/**/*.mid
 /[Aa]ssets/**/*.midi
-/[Aa]ssets/**/*.fbx
 /[Aa]ssets/**/*.obj
 /[Aa]ssets/**/*.3ds
 /[Aa]ssets/**/*.dae
@@ -99,10 +98,6 @@ crashlytics-build.properties
 /[Aa]ssets/**/*.c4d
 /[Aa]ssets/**/*.ma
 /[Aa]ssets/**/*.mb
-/[Aa]ssets/**/*.anim
-/[Aa]ssets/**/*.controller
-/[Aa]ssets/**/*.prefab
-/[Aa]ssets/**/*.mat
 /[Aa]ssets/**/*.shader
 /[Aa]ssets/**/*.exr
 /[Aa]ssets/**/*.hdr
@@ -117,3 +112,5 @@ crashlytics-build.properties
 /[Aa]ssets/25\ Rpg\ Game\ Tracks/
 /[Aa]ssets/RainMaker/
 /[Aa]ssets/TeddySuitKid/
+/[Aa]ssets/Models/Models/FBX\ format/
+/[Aa]ssets/Models/Models/OBJ\ format/
